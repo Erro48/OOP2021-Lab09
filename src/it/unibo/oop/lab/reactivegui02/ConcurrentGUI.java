@@ -100,7 +100,7 @@ public class ConcurrentGUI extends JFrame {
                     } else {
                         this.counter--;
                     }
-                    Thread.sleep(100);
+                    Thread.sleep(DELAYMS);
                 } catch (InvocationTargetException | InterruptedException ex) {
                     /*
                      * This is just a stack trace print, in a real program there
