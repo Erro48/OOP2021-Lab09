@@ -43,6 +43,18 @@ public class ConcurrentGUI extends JFrame {
                 stop.setEnabled(false);
             }
         });
+        up.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                agent.increment();
+            }
+        });
+        down.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                agent.decrement();
+            }
+        });
     }
     
     private class Agent implements Runnable {
@@ -106,8 +118,12 @@ public class ConcurrentGUI extends JFrame {
             this.stop = true;
         }
         
-        public void invertCounting() {
-            this.countingDirection = !this.countingDirection;
+        public void increment() {
+            this.countingDirection = true;
+        }
+        
+        public void decrement() {
+            this.countingDirection = false;
         }
     }
 }
