@@ -59,7 +59,7 @@ public class ConcurrentGUI extends JFrame {
         private static final int DELAYMS = 100;
         private volatile boolean stop;
         private volatile int counter;
-        private boolean increment = true;
+        private boolean countingDirection = true;
 
         @Override
         public void run() {
@@ -83,7 +83,11 @@ public class ConcurrentGUI extends JFrame {
                      *
                      * EXERCISE: Can you think of a solution that doesn't require counter to be volatile?
                      */
-                    this.counter++;
+                    if (this.countingDirection) {
+                        this.counter++;
+                    } else {
+                        this.counter--;
+                    }
                     Thread.sleep(100);
                 } catch (InvocationTargetException | InterruptedException ex) {
                     /*
@@ -100,6 +104,10 @@ public class ConcurrentGUI extends JFrame {
          */
         public void stopCounting() {
             this.stop = true;
+        }
+        
+        public void invertCounting() {
+            this.countingDirection = !this.countingDirection;
         }
     }
 }
