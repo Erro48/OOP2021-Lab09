@@ -16,6 +16,7 @@ public class AnotherConcurrentGUI extends JFrame {
     private static final long serialVersionUID = 1L;
     private static final double WIDTH_PERC = 0.2;
     private static final double HEIGHT_PERC = 0.1;
+    private static final int WORKING_TIME = 10_000;
     private final JLabel display = new JLabel();
     private final JButton up = new JButton("up");
     private final JButton down = new JButton("down");
@@ -41,6 +42,18 @@ public class AnotherConcurrentGUI extends JFrame {
         this.stop.addActionListener( e -> agent.stopCounter());
         
         new Thread(agent).start();
+        new Thread(new Runnable() {
+            
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(AnotherConcurrentGUI.WORKING_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                AnotherConcurrentGUI.this.agent.stopCounter();
+            }
+        }).start();
     }
     
     private class CounterAgent implements Runnable {
