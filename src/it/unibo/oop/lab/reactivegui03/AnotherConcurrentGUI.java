@@ -35,6 +35,10 @@ public class AnotherConcurrentGUI extends JFrame {
         panel.add(stop);
         this.getContentPane().add(panel);
         this.setVisible(true);
+        
+        this.up.addActionListener( e -> agent.goUp());
+        this.down.addActionListener( e -> agent.goDown());
+        this.stop.addActionListener( e -> agent.stopCounter());
     }
     
     private class CounterAgent implements Runnable {
