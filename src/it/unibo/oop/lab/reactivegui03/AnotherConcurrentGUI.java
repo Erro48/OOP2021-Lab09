@@ -39,6 +39,8 @@ public class AnotherConcurrentGUI extends JFrame {
         this.up.addActionListener( e -> agent.goUp());
         this.down.addActionListener( e -> agent.goDown());
         this.stop.addActionListener( e -> agent.stopCounter());
+        
+        new Thread(agent).start();
     }
     
     private class CounterAgent implements Runnable {
@@ -52,6 +54,7 @@ public class AnotherConcurrentGUI extends JFrame {
         @Override
         public void run() {
             while (!this.stop) {
+                AnotherConcurrentGUI.this.display.setText(Integer.toString(this.counter));;
                 if (this.up) {
                     this.incCounter();
                 } else {
