@@ -21,6 +21,8 @@ public class AnotherConcurrentGUI extends JFrame {
     private final JButton down = new JButton("down");
     private final JButton stop = new JButton("stop");
     
+    private final CounterAgent agent = new CounterAgent();
+    
     public AnotherConcurrentGUI() {
         super();
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
