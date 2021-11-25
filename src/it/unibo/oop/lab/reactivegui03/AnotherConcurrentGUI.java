@@ -38,12 +38,48 @@ public class AnotherConcurrentGUI extends JFrame {
     }
     
     private class CounterAgent implements Runnable {
+        
+        private static final int DELAY = 100;
+        
+        private boolean up = true;
+        private int counter;
+        private boolean stop = false;
 
         @Override
         public void run() {
-            
+            while (!this.stop) {
+                if (this.up) {
+                    this.incCounter();
+                } else {
+                    this.decCounter();
+                }
+                try {
+                    Thread.sleep(DELAY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         
+        private void incCounter() {
+            this.counter++;
+        }
+        
+        private void decCounter() {
+            this.counter--;
+        }
+        
+        private void goUp() {
+            this.up = true;
+        }
+        
+        private void goDown() {
+            this.up = false;
+        }
+        
+        private void stopCounter() {
+            this.stop = true;
+        }
     }
     
 }
