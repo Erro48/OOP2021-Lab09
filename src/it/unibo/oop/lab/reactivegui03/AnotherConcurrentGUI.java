@@ -35,4 +35,13 @@ public class AnotherConcurrentGUI extends JFrame {
         this.setVisible(true);
     }
     
+    private class CounterAgent implements Runnable {
+
+        @Override
+        public void run() {
+            
+        }
+        
+    }
+    
 }
