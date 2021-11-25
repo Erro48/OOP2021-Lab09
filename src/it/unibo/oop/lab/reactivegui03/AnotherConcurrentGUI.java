@@ -20,6 +20,7 @@ public class AnotherConcurrentGUI extends JFrame {
     private final JButton up = new JButton("up");
     private final JButton down = new JButton("down");
     private final JButton stop = new JButton("stop");
+    private volatile boolean stopCounter;
     
     public AnotherConcurrentGUI() {
         super();
@@ -36,6 +37,8 @@ public class AnotherConcurrentGUI extends JFrame {
         
         final Agent agent = new Agent();
         new Thread(agent).start();
+        final WaitAgent wagent = new WaitAgent();
+        new Thread(wagent).start();
         
         stop.addActionListener(new ActionListener() {
             @Override
@@ -72,13 +75,12 @@ public class AnotherConcurrentGUI extends JFrame {
          * 
          */
         private static final int DELAYMS = 100;
-        private volatile boolean stop;
         private volatile int counter;
         private boolean countingDirection = true;
 
         @Override
         public void run() {
-            while (!this.stop) {
+            while (!AnotherConcurrentGUI.this.stopCounter) {
                 try {
                     /*
                      * All the operations on the GUI must be performed by the
@@ -118,7 +120,7 @@ public class AnotherConcurrentGUI extends JFrame {
          * External command to stop counting.
          */
         public void stopCounting() {
-            this.stop = true;
+            AnotherConcurrentGUI.this.stopCounter = true;
         }
         
         public void increment() {
@@ -128,5 +130,26 @@ public class AnotherConcurrentGUI extends JFrame {
         public void decrement() {
             this.countingDirection = false;
         }
+    }
+    
+    private class WaitAgent implements Runnable {
+        
+        private static final int DELAY = 10_000;
+        
+        @Override
+        public void run() {
+            while (!AnotherConcurrentGUI.this.stopCounter) {                
+                try {
+                    Thread.sleep(DELAY);
+                    AnotherConcurrentGUI.this.stopCounter = true;
+                    AnotherConcurrentGUI.this.up.setEnabled(false);
+                    AnotherConcurrentGUI.this.down.setEnabled(false);
+                    AnotherConcurrentGUI.this.stop.setEnabled(false);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
     }
 }
