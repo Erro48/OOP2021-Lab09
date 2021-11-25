@@ -86,6 +86,9 @@ public class AnotherConcurrentGUI extends JFrame {
         
         private void stopCounter() {
             this.stop = true;
+            AnotherConcurrentGUI.this.up.setEnabled(false);
+            AnotherConcurrentGUI.this.down.setEnabled(false);
+            AnotherConcurrentGUI.this.stop.setEnabled(false);
         }
     }
     
