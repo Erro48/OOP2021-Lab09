@@ -15,10 +15,53 @@ public class MultiThreadedSumMatrix implements SumMatrix {
         int size = matrix.length;
         int load = size / nthread;
         System.out.println("Nthreads: " + this.nthread);
-        IntStream.iterate(load, start -> start + load).limit(nthread);
+        return IntStream.iterate(0, start -> start + load)
+                .limit(nthread)
+                .mapToObj(start -> new Worker(matrix, start, load))
+                .peek(Thread::start)
+                .peek(MultiThreadedSumMatrix::joinUninterruptibly)
+                .mapToInt(Worker::getSum)
+                .sum();
+    }
+    
+    private static void joinUninterruptibly(final Thread target) {
+        var joined = false;
+        while (!joined) {
+            try {
+                target.join();
+                joined = true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    private class Worker extends Thread {
         
-
-        return 0;
+        private final double[][] matrix;
+        private final int start;
+        private final int size;
+        private int sum;
+        
+        public Worker(final double[][] matrix, final int start, final int size) {
+            this.matrix = matrix;
+            this.start = start;
+            this.size = size;
+        }
+        
+        @Override
+        public void run() {
+            for (int i = start; i < start + size; i++) {
+                for(int j = 0; j < matrix[i].length; j++) {
+                    sum += matrix[i][j];
+                }
+            }
+        }
+        
+        public int getSum() {
+            return this.sum;
+        }
+        
     }
 
 }
